@@ -1,0 +1,22 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  # The base box to use
+  config.vm.box = "bento/ubuntu-19.10"
+
+  # forwards port 8080 on the host to port 80 on the guest
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # refresh apt before installing any packages (as base box might be out of date)
+  config.vm.provision "shell", inline: <<-SHELL
+     sudo apt-get update
+  SHELL
+  
+  config.vm.provision :shell, path: "provisioning/bootstrap.sh"
+  config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = "puppet/manifests"
+    puppet.manifest_file = "site.pp"
+    puppet.module_path = "puppet/modules"
+  end
+end
