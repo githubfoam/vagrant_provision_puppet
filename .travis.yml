@@ -36,6 +36,6 @@ matrix:
       script:
         - sudo make deploy-libvirt
         - sudo make deploy-vagrant
-        - sudo make deploy-chef
+        - sudo make deploy-puppet
       after_success:
         - deactivate        
