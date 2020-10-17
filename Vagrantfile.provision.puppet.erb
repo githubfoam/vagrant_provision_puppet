@@ -1,22 +1,41 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure(2) do |config|
-  # The base box to use
-  config.vm.box = "bento/ubuntu-19.10"
+domain = 'example.com'
+box = 'bento/ubuntu-19.10'
+ram = 4916
 
-  # forwards port 8080 on the host to port 80 on the guest
-  config.vm.network "forwarded_port", guest: 80, host: 8080
+puppet_nodes = [
+  {:hostname => 'puppet',  :ip => '172.16.32.10', :box => box, :fwdhost => 8140, :fwdguest => 8140, :ram => ram},
+  {:hostname => 'client1', :ip => '172.16.32.11', :box => box},
+  {:hostname => 'client2', :ip => '172.16.32.12', :box => box},
+]
 
-  # refresh apt before installing any packages (as base box might be out of date)
-  config.vm.provision "shell", inline: <<-SHELL
-     sudo apt-get update
-  SHELL
-  
-  config.vm.provision :shell, path: "provisioning/bootstrap.sh"
-  config.vm.provision :puppet do |puppet|
-    puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file = "site.pp"
-    puppet.module_path = "puppet/modules"
+Vagrant.configure("2") do |config|
+  puppet_nodes.each do |node|
+    config.vm.define node[:hostname] do |node_config|
+      node_config.vm.box = node[:box]
+      node_config.vm.box_url = 'https://vagrantcloud.com/' + node_config.vm.box
+      node_config.vm.hostname = node[:hostname] + '.' + domain
+      node_config.vm.network :private_network, ip: node[:ip]
+
+      if node[:fwdhost]
+        node_config.vm.network :forwarded_port, guest: node[:fwdguest], host: node[:fwdhost]
+      end
+
+      memory = node[:ram] ? node[:ram] : 256;
+      node_config.vm.provider :virtualbox do |vb|
+        vb.customize [
+          'modifyvm', :id,
+          '--name', node[:hostname],
+          '--memory', memory.to_s
+        ]
+      end
+
+      node_config.vm.provision :puppet do |puppet|
+        puppet.manifests_path = 'provision/manifests'
+        puppet.module_path = 'provision/modules'
+      end
+    end
   end
 end
