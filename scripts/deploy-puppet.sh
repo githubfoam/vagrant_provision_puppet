@@ -27,10 +27,11 @@ echo "==========================================================================
 # vagrant mutate "bento/fedora-32" libvirt
 # vagrant up --provider=libvirt "vg-controller-84"
 
-# Ansible provision OK
+
 # https://app.vagrantup.com/centos/boxes/8
-# vagrant box add "centos/8" --provider=libvirt
-# vagrant up --provider=libvirt "vg-controller-85"
+vagrant box add "centos/7" --provider=libvirt
+vagrant init --template Vagrantfile.provision.puppet.erb
+vagrant up --provider=libvirt
 
 #vg-controller-86: /tmp/vagrant-shell: line 8:  3409 Killed                  dnf -y update
 # https://app.vagrantup.com/fedora/boxes/32-cloud-base
@@ -43,10 +44,10 @@ echo "==========================================================================
 
 
 # https://github.com/chef/bento/tree/master/packer_templates/ubuntu
-vagrant box add "bento/ubuntu-19.10" --provider=virtualbox
-vagrant mutate "bento/ubuntu-19.10" libvirt
-vagrant init --template Vagrantfile.provision.puppet.erb
-vagrant up --provider=libvirt
+# vagrant box add "bento/ubuntu-19.10" --provider=virtualbox
+# vagrant mutate "bento/ubuntu-19.10" libvirt
+# vagrant init --template Vagrantfile.provision.puppet.erb
+# vagrant up --provider=libvirt
 
 # https://github.com/chef/bento/tree/master/packer_templates/ubuntu
 # vagrant box add "bento/ubuntu-19.10" --provider=virtualbox
