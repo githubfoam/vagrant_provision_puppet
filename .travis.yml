@@ -24,7 +24,7 @@ matrix:
     #   after_success:
     #     - deactivate  
 
-    - name: "deploy vagrant puppet provisioning - bionic"
+    - name: "deploy puppet  topology - bionic"
       dist: bionic
       language: python
       python: 3.7
@@ -36,6 +36,6 @@ matrix:
       script:
         - sudo make deploy-libvirt
         - sudo make deploy-vagrant
-        - sudo make deploy-puppet
+        - sudo make deploy-topology
       after_success:
         - deactivate        
