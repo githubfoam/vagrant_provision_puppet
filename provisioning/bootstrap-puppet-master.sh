@@ -52,5 +52,13 @@ systemctl status puppetserver
 # If the puppetserver service fails to start, check that the port is not already in use
 netstat -anpl | grep 8140 & sleep 5
 
+# Log in to your Puppet master and list the certificates that need approval
+# It should output a list with your agent nodes' hostnames.
+#/opt/puppetlabs/bin/puppetserver ca list
+
+# Approve the certificates
+/opt/puppetlabs/bin/puppetserver ca sign --certname puppet-agent-ubuntu.example.com,puppet-agent-cent
+
+
 
 echo "======================Deploy puppet master=============================================================="

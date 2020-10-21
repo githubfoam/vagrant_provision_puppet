@@ -1,9 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 $docker_script = <<SCRIPT
-echo "192.168.45.1 puppet.example.com vg-puppet" |sudo tee -a /etc/hosts
-echo "192.168.45.2 vg-puppet-agent-ubuntu.example.com vg-puppet-agent-ubuntu" |sudo tee -a /etc/hosts
-echo "192.168.45.3 vg-puppet-agent-centos.example.com vg-puppet-agent-centos" |sudo tee -a /etc/hosts
+echo "192.168.45.1 puppet.example.com puppet" |sudo tee -a /etc/hosts
+echo "192.168.45.2 puppet-agent-ubuntu.example.com puppet-agent-ubuntu" |sudo tee -a /etc/hosts
+echo "192.168.45.3 puppet-agent-centos.example.com puppet-agent-centos" |sudo tee -a /etc/hosts
 cat /etc/hosts
 echo "name: nameserver, ip: 8.8.8.8 " |sudo tee -a /etc/resolv.conf
 cat /etc/resolv.conf
@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
     vb.cpus = 1
   end
 
-  config.vm.define "vg-puppet" do |webtier|
+  config.vm.define "puppet" do |webtier|
       webtier.vm.box = "bento/ubuntu-19.10"
       webtier.vm.hostname = "control01"
       webtier.vm.network "private_network", ip: "192.168.45.41"
@@ -27,11 +27,11 @@ Vagrant.configure("2") do |config|
       #webtier.vm.provision "shell", inline: $docker_script, privileged: false
       webtier.vm.provision :shell, path: "provisioning/bootstrap-puppet-master.sh"
       webtier.vm.provision "shell", inline: <<-SHELL
-      hostnamectl set-hostname vg-puppet
+      hostnamectl set-hostname puppet
       SHELL
     end
 
-  config.vm.define "vg-puppet-agent-ubuntu" do |webtier|
+  config.vm.define "puppet-agent-ubuntu" do |webtier|
       webtier.vm.box = "bento/ubuntu-19.10"
       webtier.vm.hostname = "control01"
       webtier.vm.network "private_network", ip: "192.168.45.42"
@@ -41,11 +41,11 @@ Vagrant.configure("2") do |config|
 
       #webtier.vm.provision "shell", inline: $docker_script, privileged: false
       webtier.vm.provision "shell", inline: <<-SHELL
-      hostnamectl set-hostname vg-puppet-agent-ubuntu
+      hostnamectl set-hostname puppet-agent-ubuntu
       SHELL
     end
 
-  config.vm.define "vg-puppet-agent-centos" do |webtier|
+  config.vm.define "puppet-agent-centos" do |webtier|
       webtier.vm.box = "bento/centos-7.6"
       webtier.vm.hostname = "control01"
       webtier.vm.network "private_network", ip: "192.168.45.43"
@@ -55,7 +55,7 @@ Vagrant.configure("2") do |config|
 
       #webtier.vm.provision "shell", inline: $docker_script, privileged: false
       webtier.vm.provision "shell", inline: <<-SHELL
-      hostnamectl set-hostname vg-puppet-agent-centos
+      hostnamectl set-hostname puppet-agent-centos
       SHELL
     end
 
