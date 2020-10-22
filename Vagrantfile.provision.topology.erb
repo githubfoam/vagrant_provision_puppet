@@ -5,7 +5,7 @@ echo "192.168.45.1 puppet.example.com puppet" |sudo tee -a /etc/hosts
 echo "192.168.45.2 puppet-agent-ubuntu.example.com puppet-agent-ubuntu" |sudo tee -a /etc/hosts
 echo "192.168.45.3 puppet-agent-centos.example.com puppet-agent-centos" |sudo tee -a /etc/hosts
 cat /etc/hosts
-echo "name: nameserver, ip: 8.8.8.8 " |sudo tee -a /etc/resolv.conf
+echo "nameserver 8.8.8.8 " |sudo tee -a /etc/resolv.conf
 cat /etc/resolv.conf
 SCRIPT
 
