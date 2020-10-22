@@ -44,7 +44,7 @@ vagrant box add "centos/7" --provider=libvirt
 # https://github.com/chef/bento/tree/master/packer_templates/ubuntu
 vagrant box add "bento/ubuntu-19.10" --provider=virtualbox
 vagrant mutate "bento/ubuntu-19.10" libvirt
-vagrant init --template Vagrantfile.provision.puppet.erb
+vagrant init --template Vagrantfile.provision.topology.erb
 # vagrant up --provider=libvirt
 vagrant up --provider=libvirt puppet
 vagrant up --provider=libvirt puppet-agent-ubuntu
