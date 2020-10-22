@@ -48,7 +48,7 @@ systemctl status puppet
 # generate a certificate for the Puppet master to sign
 # This command will output an error, stating that no certificate has been found. 
 # This error is because the generated certificate needs to be approved by the Puppet master
-/opt/puppetlabs/bin/puppet agent -t
+# /opt/puppetlabs/bin/puppet agent -t
 
 # Return to the Puppet agent nodes and run the Puppet agent again
 # /opt/puppetlabs/bin/puppet agent -t
