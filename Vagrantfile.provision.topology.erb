@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
           vb.name = "vbox-puppet"
       end
 
-      #webtier.vm.provision "shell", inline: $docker_script, privileged: false
+      webtier.vm.provision "shell", inline: $docker_script, privileged: false
       webtier.vm.provision :shell, path: "provisioning/bootstrap-puppet-master.sh"
       webtier.vm.provision "shell", inline: <<-SHELL
       hostnamectl set-hostname puppet
@@ -39,21 +39,23 @@ Vagrant.configure("2") do |config|
           vb.name = "vbox-puppet-agent-ubuntu"
       end
 
-      #webtier.vm.provision "shell", inline: $docker_script, privileged: false
+      webtier.vm.provision "shell", inline: $docker_script, privileged: false
+      webtier.vm.provision :shell, path: "provisioning/bootstrap-puppet-agent-ubuntu.sh"
       webtier.vm.provision "shell", inline: <<-SHELL
       hostnamectl set-hostname puppet-agent-ubuntu
       SHELL
     end
 
   config.vm.define "puppet-agent-centos" do |webtier|
-      webtier.vm.box = "bento/centos-7.6"
+      webtier.vm.box = "centos/7"
       webtier.vm.hostname = "puppet-agent-centos"
       webtier.vm.network "private_network", ip: "192.168.45.43"
       webtier.vm.provider "virtualbox" do |vb|
           vb.name = "vbox-puppet-agent-centos"
       end
 
-      #webtier.vm.provision "shell", inline: $docker_script, privileged: false
+      webtier.vm.provision "shell", inline: $docker_script, privileged: false
+      webtier.vm.provision :shell, path: "provisioning/bootstrap-puppet-agent-centos.sh"
       webtier.vm.provision "shell", inline: <<-SHELL
       hostnamectl set-hostname puppet-agent-centos
       SHELL
